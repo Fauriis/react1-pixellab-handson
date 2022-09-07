@@ -258,12 +258,12 @@ class HeaderCounters extends React.Component {
     return (
       <>
         <div class="header-counter" onClick={this.showProducts}>
-          <span class="cart-qty">{this.state.cartItemsCount}</span>
+          <span class="qty">{this.state.cartItemsCount}</span>
           <i class="fas fa-heart icon"></i>
         </div>
 
         <div class="header-counter" onClick={this.showProducts}>
-          <span class="cart-qty">{this.state.cartItemsCount}</span>
+          <span class="qty">{this.state.cartItemsCount}</span>
           <i class="fas fa-shopping-cart icon"></i>
         </div>
       </>
