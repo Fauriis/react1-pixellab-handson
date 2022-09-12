@@ -1,5 +1,7 @@
 const ADD_TO_CART_EVENT = 'cart/productAdded';
 const REMOVE_FROM_CART_EVENT = 'cart/producRemoved';
+const ADD_TO_WISHLIST_EVENT = 'wl/productAdded';
+const REMOVE_FROM_WISHLIST_EVENT = 'wl/productRemoved';
 
 class NewsletterForm extends React.Component {
   state = {
@@ -162,6 +164,18 @@ const AddToWishlistButton = ({ productId }) => {
     });
 
     setTimeout(() => {
+      // dispatch event
+      const newEvent = new CustomEvent(
+        actualState.added ? REMOVE_FROM_WISHLIST_EVENT : ADD_TO_WISHLIST_EVENT,
+        {
+          detail: {
+            productId,
+          },
+        },
+      );
+
+      dispatchEvent(newEvent);
+
       setState({
         added: !actualState.added,
         busy: false,
@@ -187,15 +201,22 @@ const AddToWishlistButton = ({ productId }) => {
 
 class ProductControls extends React.Component {
   render() {
+    const productId = this.props.productId;
+
+    // study
+
+    const WrappedButton = ({ productId }) => {
+      return <AddToCartButton productId={productId}></AddToCartButton>;
+    };
+
+    // study 2
+
+    const X = AddToWishlistButton;
+
     return [
-      <AddToCartButton
-        key="cart"
-        productId={this.props.productId}
-      ></AddToCartButton>,
-      <AddToWishlistButton
-        key="wl"
-        productId={this.props.productId}
-      ></AddToWishlistButton>,
+      <WrappedButton productId={productId} key="cart"></WrappedButton>,
+
+      <X key="wl" productId={this.props.productId}></X>,
     ];
   }
 }
@@ -213,42 +234,83 @@ class HeaderCounters extends React.Component {
   state = {
     cartItemsCount: 0,
     cartItems: [],
+    wishlistItemsCount: 0,
+    wishlistItems: [],
+  };
+
+  productCartAction = (event) => {
+    const { productId } = event.detail;
+    // slice will clone the array
+    // we don't mutate state
+    const cartItems = this.state.cartItems.slice();
+    // named destructure
+    // const eventType = event.type
+    const { type: eventType } = event;
+
+    switch (eventType) {
+      case ADD_TO_CART_EVENT:
+        cartItems.push(productId);
+        this.setState({
+          cartItems,
+          cartItemsCount: this.state.cartItemsCount + 1,
+        });
+        break;
+
+      case REMOVE_FROM_CART_EVENT:
+        // filter clones as well
+        this.setState({
+          cartItems: cartItems.filter((item) => {
+            return item !== productId;
+          }),
+          cartItemsCount: this.state.cartItemsCount - 1,
+        });
+        break;
+    }
+  };
+
+  productWishlistAction = (event) => {
+    const productId = event.detail.productId;
+
+    switch (event.type) {
+      case ADD_TO_WISHLIST_EVENT:
+        // rest operator example
+        const newProductIds =
+          this.state.wishlistItems.length === 0
+            ? [productId]
+            : [...this.state.wishlistItems, productId];
+
+        this.setState({
+          wishlistItems: newProductIds,
+          wishlistItemsCount: this.state.wishlistItemsCount + 1,
+        });
+        break;
+    }
   };
 
   componentDidMount() {
-    addEventListener(ADD_TO_CART_EVENT, (event) => {
-      const productId = event.detail.productId;
-      // slice will clone the array
+    addEventListener(ADD_TO_CART_EVENT, this.productCartAction);
+    addEventListener(REMOVE_FROM_CART_EVENT, this.productCartAction);
 
-      const cartItems = this.state.cartItems.slice();
-      cartItems.push(productId);
-
-      this.setState({
-        cartItemsCount: cartItems.length,
-        cartItems,
-      });
-    });
-
-    addEventListener(REMOVE_FROM_CART_EVENT, (event) => {
-      const productId = event.detail.productId;
-      const cartItems = this.state.cartItems.filter((cartItem) => {
-        return productId !== cartItem;
-      });
-
-      this.setState({
-        cartItemsCount: cartItems.length,
-        cartItems,
-      });
-    });
+    addEventListener(ADD_TO_WISHLIST_EVENT, this.productWishlistAction);
+    addEventListener(REMOVE_FROM_WISHLIST_EVENT, this.productWishlistAction);
   }
 
-  showProducts = () => {
+  componentWillUnmount() {
+    removeEventListener(ADD_TO_CART_EVENT, this.productCartAction);
+    removeEventListener(REMOVE_FROM_CART_EVENT, this.productCartAction);
+
+    removeEventListener(ADD_TO_WISHLIST_EVENT, this.productWishlistAction);
+    removeEventListener(REMOVE_FROM_WISHLIST_EVENT, this.productWishlistAction);
+  }
+
+  showProducts = (collectionName, displayName) => {
     let message = '';
 
-    if (this.state.cartItems.length <= 0) {
-      message = 'There are no products in your cart';
+    // dynamic access with bracket notation
+    if (this.state[collectionName].length <= 0) {
+      message = `There are no products in your ${displayName}.`;
     } else {
-      message = `These are the pids in your cart: ${this.state.cartItems}`;
+      message = `These are the pids in your ${displayName}: ${this.state[collectionName]}.`;
     }
 
     alert(message);
@@ -257,15 +319,50 @@ class HeaderCounters extends React.Component {
   render() {
     return (
       <>
-        <div class="header-counter" onClick={this.showProducts}>
-          <span class="qty">{this.state.cartItemsCount}</span>
+        <div
+          class="header-counter"
+          onClick={() => {
+            this.showProducts('wishlistItems', 'wishlist');
+          }}
+        >
+          <span class="qty">{this.state.wishlistItemsCount}</span>
           <i class="fas fa-heart icon"></i>
         </div>
 
-        <div class="header-counter" onClick={this.showProducts}>
-          <span class="qty">{this.state.cartItemsCount}</span>
+        <div
+          class="header-counter"
+          onClick={() => {
+            this.showProducts('cartItmes', 'cart');
+          }}
+        >
+          <span class="qty">{this.state.wishlistItemsCount}</span>
           <i class="fas fa-shopping-cart icon"></i>
         </div>
+      </>
+    );
+  }
+}
+
+// test pentru threadaffair, nu monochrome
+
+class HCWrapper extends React.Component {
+  state = {
+    visible: true,
+  };
+
+  onClick = () => {
+    this.setState({
+      visible: !this.state.visible,
+    });
+  };
+
+  render() {
+    return (
+      <>
+        <button title="title" onClick={this.onClick}>
+          toggle
+        </button>
+        ;{this.state.visible ? <HeaderCounters></HeaderCounters> : ''}
       </>
     );
   }
@@ -274,4 +371,4 @@ class HeaderCounters extends React.Component {
 const headerCounters = document.querySelector('.header-counters');
 // mount react the good way
 
-ReactDOM.createRoot(headerCounters).render(<HeaderCounters></HeaderCounters>);
+ReactDOM.createRoot(headerCounters).render(<HCWrapper></HCWrapper>);
