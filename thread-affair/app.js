@@ -1,5 +1,5 @@
 const ADD_TO_CART_EVENT = 'cart/productAdded';
-const REMOVE_FROM_CART_EVENT = 'cart/producRemoved';
+const REMOVE_FROM_CART_EVENT = 'cart/productRemoved';
 const ADD_TO_WISHLIST_EVENT = 'wl/productAdded';
 const REMOVE_FROM_WISHLIST_EVENT = 'wl/productRemoved';
 
@@ -71,7 +71,7 @@ class NewsletterForm extends React.Component {
           type="text"
           name="field-newsletter"
           id="field-newsletter"
-          placeholder="Write your email"
+          placeholder="vrem sa iesim la pauza =))"
           onChange={this.onInputChange}
           value={this.state.email}
         ></input>
@@ -86,21 +86,20 @@ class NewsletterForm extends React.Component {
   }
 }
 
-// react crs 2
-
 const newsletterContainer = document.querySelector('.home-newsletter');
 // React recipe?
 ReactDOM.render(<NewsletterForm></NewsletterForm>, newsletterContainer);
 
 class AddToCartButton extends React.Component {
-  // all components require render
-
   state = {
     added: false,
     busy: false,
   };
 
   onClick = () => {
+    // NO
+    // this.state.added = !this.state.added
+
     this.setState({
       busy: true,
     });
@@ -119,16 +118,15 @@ class AddToCartButton extends React.Component {
       );
 
       this.setState({
-        // ! = not
         added: !this.state.added,
         busy: false,
       });
     }, 2000);
   };
 
+  // all components require a render
   render() {
-    // render must return JSX
-
+    // render must return jsx
     return (
       <button
         className={`product-control ${this.state.added ? 'active' : ''}`}
@@ -138,9 +136,8 @@ class AddToCartButton extends React.Component {
         disabled={this.state.busy}
       >
         {this.state.added === true
-          ? `PID: ${this.props.productId} in Cart`
+          ? `PID: ${this.props.productId} in cart`
           : 'Add to Cart'}
-
         {this.state.busy ? <i className="fas fa-spinner"></i> : ''}
       </button>
     );
@@ -148,7 +145,6 @@ class AddToCartButton extends React.Component {
 }
 
 // function react component
-
 const AddToWishlistButton = ({ productId }) => {
   const state = React.useState({
     added: false,
@@ -185,44 +181,40 @@ const AddToWishlistButton = ({ productId }) => {
 
   return (
     <button
-      type="button"
       className={`product-control ${actualState.added ? 'active' : ''}`}
-      title={actualState.added ? 'Remove from wishlist' : 'Add to wishlist'}
+      title={actualState.added ? 'Remove from Wishlist' : 'Add to Wishlist'}
+      type="button"
       onClick={onClick}
     >
       {actualState.added === true
         ? `PID: ${productId} in wishlist`
         : 'Add to Wishlist'}
-
       {actualState.busy ? <i className="fas fa-spinner"></i> : ''}
     </button>
   );
 };
 
 class ProductControls extends React.Component {
+  // jsx needs one root export element
   render() {
     const productId = this.props.productId;
 
-    // study
-
+    // study 1
     const WrappedButton = ({ productId }) => {
       return <AddToCartButton productId={productId}></AddToCartButton>;
     };
 
     // study 2
-
     const X = AddToWishlistButton;
 
     return [
       <WrappedButton productId={productId} key="cart"></WrappedButton>,
-
       <X key="wl" productId={this.props.productId}></X>,
     ];
   }
 }
 
 const productTileControls = document.querySelectorAll('.product-tile-controls');
-
 productTileControls.forEach((productTileControl, index) => {
   ReactDOM.render(
     <ProductControls productId={index}></ProductControls>,
@@ -240,6 +232,7 @@ class HeaderCounters extends React.Component {
 
   productCartAction = (event) => {
     const { productId } = event.detail;
+    alert(productId);
     // slice will clone the array
     // we don't mutate state
     const cartItems = this.state.cartItems.slice();
@@ -284,6 +277,16 @@ class HeaderCounters extends React.Component {
           wishlistItemsCount: this.state.wishlistItemsCount + 1,
         });
         break;
+
+      case REMOVE_FROM_WISHLIST_EVENT:
+        this.setState({
+          wishlistItems: this.state.wishlistItems.filter((item) => {
+            return item !== productId;
+          }),
+          wishlistItemsCount: this.state.wishlistItemsCount - 1,
+        });
+
+        break;
     }
   };
 
@@ -303,6 +306,8 @@ class HeaderCounters extends React.Component {
     removeEventListener(REMOVE_FROM_WISHLIST_EVENT, this.productWishlistAction);
   }
 
+  // see some nasty stuff
+
   showProducts = (collectionName, displayName) => {
     let message = '';
 
@@ -320,31 +325,30 @@ class HeaderCounters extends React.Component {
     return (
       <>
         <div
-          class="header-counter"
+          className="header-counter"
           onClick={() => {
             this.showProducts('wishlistItems', 'wishlist');
           }}
         >
-          <span class="qty">{this.state.wishlistItemsCount}</span>
-          <i class="fas fa-heart icon"></i>
+          <span className="qty">{this.state.wishlistItemsCount}</span>
+          <i className="fas fa-heart icon"></i>
         </div>
 
         <div
-          class="header-counter"
+          className="header-counter"
           onClick={() => {
-            this.showProducts('cartItmes', 'cart');
+            this.showProducts('cartItems', 'cart');
           }}
         >
-          <span class="qty">{this.state.wishlistItemsCount}</span>
-          <i class="fas fa-shopping-cart icon"></i>
+          <span className="qty">{this.state.cartItemsCount}</span>
+          <i className="fas fa-shopping-cart icon"></i>
         </div>
       </>
     );
   }
 }
 
-// test pentru threadaffair, nu monochrome
-
+// not necessary for monochrome
 class HCWrapper extends React.Component {
   state = {
     visible: true,
@@ -362,7 +366,7 @@ class HCWrapper extends React.Component {
         <button title="title" onClick={this.onClick}>
           toggle
         </button>
-        ;{this.state.visible ? <HeaderCounters></HeaderCounters> : ''}
+        {this.state.visible ? <HeaderCounters></HeaderCounters> : ''}
       </>
     );
   }
@@ -370,5 +374,4 @@ class HCWrapper extends React.Component {
 
 const headerCounters = document.querySelector('.header-counters');
 // mount react the good way
-
 ReactDOM.createRoot(headerCounters).render(<HCWrapper></HCWrapper>);
