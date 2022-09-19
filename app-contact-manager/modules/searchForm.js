@@ -55,8 +55,8 @@ searchForm.addEventListener('submit', (event) => {
     );
   }
 
-  stage.innerHTML = '';
   queryInput.value = '';
+  stage.innerHTML = '';
   stage.append(fragment);
 });
 

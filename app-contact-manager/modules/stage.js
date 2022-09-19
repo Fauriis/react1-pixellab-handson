@@ -47,12 +47,11 @@ stage.addEventListener('click', (event) => {
   }
 
   clearMessages();
-
   stage.innerHTML = '';
-
   stage.append(renderEditContact(contact));
 });
 
+// cancel button
 stage.addEventListener('click', (event) => {
   const { target } = event;
 
