@@ -13,8 +13,8 @@ export const render = (contact) => {
   </ul>
 
   <button title="delete" type="button" class="btn btn-secondary delete-friend"> delete</button>
-  <button title="edit" type="button" class="btn btn-secondary mx-2 edit-contact">edit</button>
-  <button title="add pet" type="button" class="btn btn-secondary">add pet</button>
+  <button title="edit" type="button" class="btn btn-secondary mx-2 edit-contact-button">edit</button>
+  <button title="add pet" type="button" class="btn btn-secondary add-pet-button">add pet</button>
   `;
 
   const petUl = document.createElement('ul');
