@@ -6,15 +6,26 @@ export const render = (contact) => {
   container.classList.add('contact', 'border', 'p-3', 'mb-4');
   container.dataset.contactId = id;
 
-  container.innerHTML = `<h1>${name + ' ' + surname}</h1>
-  <ul>
-<li> ${phone}  </li>
-<li> ${email}  </li>
-  </ul>
+  container.innerHTML = `
+    <h1>${name + ' ' + surname}</h1>
+    <ul>
+      <li>${phone}</li>
+      <li>${email}</li>
+    </ul>
+    <button title="Delete"
+      type="button"
+      class="btn btn-secondary delete-friend"
+    >Delete</button>
 
-  <button title="delete" type="button" class="btn btn-secondary delete-friend"> delete</button>
-  <button title="edit" type="button" class="btn btn-secondary mx-2 edit-contact-button">edit</button>
-  <button title="add pet" type="button" class="btn btn-secondary add-pet-button">add pet</button>
+    <button title="Edit"
+      type="button"
+      class="btn btn-secondary mx-2 edit-contact-button"
+    >Edit</button>
+
+    <button title="Add pet"
+      type="button"
+      class="btn btn-secondary add-pet-button"
+    >Add pet</button>
   `;
 
   const petUl = document.createElement('ul');

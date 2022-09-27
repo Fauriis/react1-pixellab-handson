@@ -3,6 +3,7 @@ import contacts from './data.js';
 export const findContact = (needle = 'query') => {
   const results = contacts.filter((contact) => {
     const values = Object.values(contact);
+    // [1, 'Carol', 'Carolson', '0741..', 'carol@...']
 
     const haystack = values.reduce((haystack, value) => {
       if (typeof value === 'string') {
@@ -24,7 +25,6 @@ export const findContact = (needle = 'query') => {
 
 export const deleteContact = (contactId) => {
   contactId = Number(contactId);
-
   let contactIndex = -1;
 
   for (let i = 0; i < contacts.length; i++) {
@@ -32,13 +32,13 @@ export const deleteContact = (contactId) => {
 
     if (contact.id === contactId) {
       contactIndex = i;
+
       break;
     }
   }
 
   if (contactIndex >= 0) {
-    // slice mutates
-
+    // splice mutates
     contacts.splice(contactIndex, 1);
   }
 };
@@ -52,11 +52,13 @@ export const getContact = (contactId) => {
 };
 
 export const addContact = (contact) => {
+  // push mutates
   contacts.push(contact);
 };
 
 export const editContact = (contact) => {
   const existingContact = getContact(contact.id);
+
   const contactProperties = Object.keys(existingContact);
 
   for (let i = 0; i < contactProperties.length; i++) {
@@ -66,14 +68,15 @@ export const editContact = (contact) => {
   }
 };
 
+// add pet
 export const addPet = (contactId, pet) => {
   const contact = getContact(contactId);
-
   contact.pets = contact.pets || [];
 
   contact.pets.push(pet);
 };
 
+// delete pet
 export const deletePet = (contactId, petId) => {
   const contact = getContact(contactId);
 
@@ -92,6 +95,7 @@ export const deletePet = (contactId, petId) => {
   }
 
   if (petIndex >= 0) {
+    // splice mutates
     contact.pets.splice(petIndex, 1);
   }
 };

@@ -14,8 +14,8 @@ import { render as renderAddPet } from './addPet.js';
 const stage = document.querySelector('.stage');
 
 // delete contact
-
 stage.addEventListener('click', (event) => {
+  // target, elementul de pecare a plecat evenimentul
   const { target } = event;
 
   if (
@@ -35,6 +35,7 @@ stage.addEventListener('click', (event) => {
   addMessage(renderMessage('Contact removed', 'success'));
 });
 
+// edit contact
 stage.addEventListener('click', (event) => {
   const { target } = event;
 
@@ -74,7 +75,6 @@ stage.addEventListener('click', (event) => {
 });
 
 // add contact button
-
 stage.addEventListener('submit', (event) => {
   event.preventDefault();
   const { target } = event;
@@ -83,6 +83,8 @@ stage.addEventListener('submit', (event) => {
     return;
   }
   const form = target;
+
+  // warning, these are HTML ELEMENTS (not values)
   const { name, surname, phone, email } = form;
   const contact = {
     name: name.value,
@@ -101,7 +103,6 @@ stage.addEventListener('submit', (event) => {
 });
 
 // save edit contact
-
 stage.addEventListener('submit', (event) => {
   event.preventDefault();
   const { target } = event;
@@ -114,7 +115,6 @@ stage.addEventListener('submit', (event) => {
   }
 
   const form = target;
-
   const { name, surname, phone, email, id } = form;
   const contact = {
     name: name.value,
@@ -128,6 +128,7 @@ stage.addEventListener('submit', (event) => {
 });
 
 stage.addEventListener('click', (event) => {
+  // event.preventDefault not required for type button
   const { target } = event;
 
   if (
@@ -156,6 +157,7 @@ stage.addEventListener('submit', (event) => {
   }
 
   const form = target;
+  // these are html elements
   const { age, name, species, contactId } = form;
   const { name: contactName, surname: contactSurname } = getContact(
     contactId.value,
@@ -177,27 +179,28 @@ stage.addEventListener('submit', (event) => {
       'success',
     ),
   );
+});
 
-  stage.addEventListener('click', (event) => {
-    const { target } = event;
+// delete pet button
+stage.addEventListener('click', (event) => {
+  const { target } = event;
 
-    if (
-      target.nodeName !== 'BUTTON' ||
-      !target.classList.contains('delete-pet-button')
-    ) {
-      return;
-    }
+  if (
+    target.nodeName !== 'BUTTON' ||
+    !target.classList.contains('delete-pet-button')
+  ) {
+    return;
+  }
 
-    const button = target;
-    const container = button.closest('.pet');
-    const petId = Number(container.dataset.petId);
-    const contactContainer = button.closest('.contact');
-    const contactId = contactContainer.dataset.contactId;
+  const button = target;
+  const container = button.closest('.pet');
+  const petId = Number(container.dataset.petId);
+  const contactContainer = button.closest('.contact');
+  const contactId = contactContainer.dataset.contactId;
 
-    deletePet(contactId, petId);
+  deletePet(contactId, petId);
 
-    container.remove();
-  });
+  container.remove();
 });
 
 export default stage;

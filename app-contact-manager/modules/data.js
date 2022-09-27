@@ -1,24 +1,24 @@
 export default [
   {
     id: 1,
-    name: 'carol',
-    surname: 'carolson',
-    phone: '0783727423',
-    email: 'carol@gmail.com',
+    name: 'Carol',
+    surname: 'Carolson',
+    phone: '074100000',
+    email: 'carol@carol.ro',
     pets: [
       {
         name: 'Rex',
-        species: 'caine',
-        age: 12,
+        species: 'Caine',
+        age: 32,
         id: 1,
       },
     ],
   },
   {
     id: 2,
-    name: 'larry',
-    surname: 'larryson',
-    phone: '0741345656',
-    email: 'wtv@larry.com',
+    name: 'Larry',
+    surname: 'Larryson',
+    phone: '07410000',
+    email: 'wtv@larry.ro',
   },
 ];

@@ -11,25 +11,30 @@ export const render = (contact) => {
       class="form-control form-control-sm"
       value="${name}"
     >
+
     <label class="form-label mt-2">Name</label>
     <input type="text"
       name="surname"
       class="form-control form-control-sm"
       value="${surname}"
     >
+
     <label class="form-label mt-2">Name</label>
     <input type="tel"
       name="phone"
       class="form-control form-control-sm"
       value="${phone}"
     >
+
     <label class="form-label mt-2">Name</label>
     <input type="email"
       name="email"
       class="form-control form-control-sm"
       value="${email}"
     >
+
     <input type="hidden" name="id" value="${id}">
+
     <div class="mt-2">
       <button type="submit"
         title="Save"

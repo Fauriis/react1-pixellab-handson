@@ -24,7 +24,6 @@
     rel="stylesheet"
     href="css/style.css"
   >
-
 </head>
 
 <body>
@@ -34,7 +33,7 @@
         <li class="nav-item btn-group">
           <button
             class="btn btn-success add-contact-button"
-            title="add contact"
+            title="Add contact"
           >Add contact</button>
         </li>
       </ul>
@@ -49,23 +48,35 @@
         <input
           type="text"
           class="form-control"
-          placeholder="search..."
+          placeholder="Search..."
           name="q"
         >
 
         <button
           class="btn btn-primary ms-2"
+          title="Search"
           type="submit"
-          title="search"
-        >search</button>
+        >Search</button>
       </form>
     </div>
   </header>
 
   <main class="container">
-    <div class="mb-4 notification-bar"></div>
+    <div class="notification">
+      <button
+        type="button"
+        title="Delete"
+        class="btn btn-secondary cancel-button bg-danger"
+      > X </button>
+
+      <p class="mb-4 notification-bar"></p>
+
+    </div>
 
     <div class="stage"></div>
+
+    <div id="message"> </div>
+
   </main>
 
   <script
