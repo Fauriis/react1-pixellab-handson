@@ -58,7 +58,7 @@ class NewsletterForm extends React.Component {
     }
 
     return (
-      <section class="footer-sign-up-newsletter">
+      <section className="footer-sign-up-newsletter">
         <form onSubmit={this.onSubmit}>
           <label htmlFor="email-newsletter">sign up for our newsletter</label>
 
@@ -86,7 +86,9 @@ const newsletterContainer = document.querySelector(
   '.footer-sign-up-newsletter',
 );
 
-ReactDOM.render(<NewsletterForm></NewsletterForm>, newsletterContainer);
+ReactDOM.createRoot(newsletterContainer).render(
+  <NewsletterForm></NewsletterForm>,
+);
 
 class AddToCartButton extends React.Component {
   state = {
@@ -131,7 +133,7 @@ class AddToCartButton extends React.Component {
         {this.state.added === true ? (
           `PID: ${this.props.productId} in cart`
         ) : (
-          <i class="far fa-plus-square"></i>
+          <i className="far fa-plus-square"></i>
         )}
         {this.state.busy ? <i className="fas fa-spinner"></i> : ''}
       </button>
@@ -183,7 +185,7 @@ const AddToWishlistButton = ({ productId }) => {
       {actualState.added === true ? (
         `PID: ${productId} in wishlist`
       ) : (
-        <i class="far fa-heart"></i>
+        <i className="far fa-heart"></i>
       )}
       {actualState.busy ? <i className="fas fa-spinner"></i> : ''}
     </button>
@@ -211,9 +213,8 @@ class ProductControls extends React.Component {
 const productTileControls = document.querySelectorAll('.product-tile-controls');
 
 productTileControls.forEach((productTileControl, index) => {
-  ReactDOM.render(
+  ReactDOM.createRoot(productTileControl).render(
     <ProductControls productId={index}></ProductControls>,
-    productTileControl,
   );
 });
 
@@ -265,6 +266,16 @@ class HeaderCounters extends React.Component {
           wishlistItemsCount: this.state.wishlistItemsCount + 1,
         });
         break;
+
+      case REMOVE_FROM_WISHLIST_EVENT:
+        this.setState({
+          wishlistItems: this.state.wishlistItems.filter((item) => {
+            return item !== productId;
+          }),
+          wishlistItemsCount: this.state.wishlistItemsCount - 1,
+        });
+
+        break;
     }
   };
 
@@ -300,7 +311,7 @@ class HeaderCounters extends React.Component {
           href="http://"
           title="Wishlist"
         >
-          {this.state.wishlistItemsCount} <i class="far fa-heart"></i>
+          {this.state.wishlistItemsCount} <i className="far fa-heart"></i>
         </div>
 
         <div
@@ -311,7 +322,7 @@ class HeaderCounters extends React.Component {
           href="http://"
           title="Cart"
         >
-          {this.state.cartItemsCount} <i class="fas fa-shopping-bag"></i>
+          {this.state.cartItemsCount} <i className="fas fa-shopping-bag"></i>
         </div>
       </>
     );

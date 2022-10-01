@@ -19,3 +19,30 @@ export const clearMessages = () => {
 };
 
 export default notificationBar;
+
+// export const hideNotification = () => {
+//   state = {
+//     visible: true,
+//   };
+
+//   onClick = () => {
+//     this.setState({
+//       visible: !this.state.visible,
+//     });
+//   };
+
+//   return (
+//     <>
+//       <button
+//         type="button"
+//         title="Delete"
+//         onClick={this.onClick}
+//         class="btn btn-secondary cancel-button bg-danger"
+//       >
+//         {' '}
+//         X{' '}
+//       </button>
+//       {this.state.visible ? notificationBar : ''}
+//     </>
+//   );
+// };
