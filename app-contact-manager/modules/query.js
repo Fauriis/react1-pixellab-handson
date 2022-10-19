@@ -1,4 +1,5 @@
 import contacts from './data.js';
+import { render } from './editPet.js';
 
 export const findContact = (needle = 'query', options) => {
   const results = contacts.filter((contact) => {
@@ -106,5 +107,17 @@ export const deletePet = (contactId, petId) => {
   if (petIndex >= 0) {
     // splice mutates
     contact.pets.splice(petIndex, 1);
+  }
+};
+
+export const editPet = (contactId, petId) => {
+  const existingContact = getContact(contactId);
+
+  const petProperties = Object.keys(petId);
+
+  for (let i = 0; i < petProperties.length; i++) {
+    const propertyName = petProperties[i];
+
+    existingContact[propertyName] = petId[propertyName];
   }
 };

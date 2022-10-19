@@ -27,6 +27,25 @@ searchForm.addEventListener('submit', (event) => {
     fragment.append(renderContact(contact));
   });
 
+  if (contacts.includes('a') === true) {
+    addMessage(
+      render(
+        `Found ${pluralize(contactsCount, {
+          one: 'contact',
+          many: 'contacts',
+        })} with ${
+          petsCount <= 0
+            ? 'no pets'
+            : pluralize(petsCount, {
+                one: 'pet',
+                many: 'pets',
+              })
+        }.`,
+        'success',
+      ),
+    );
+  }
+
   if (contactsCount <= 0) {
     addMessage(render('No contacts found.', 'warning'));
   } else {

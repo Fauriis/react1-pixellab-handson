@@ -5,13 +5,19 @@ import {
   deleteContact,
   deletePet,
   editContact,
+  editPet,
   getContact,
 } from './query.js';
 import renderMessage from './message.js';
 import { render as renderEditContact } from './editContact.js';
 import { render as renderAddPet } from './addPet.js';
+import { render } from './editPet.js';
 
 const stage = document.querySelector('.stage');
+
+export const clearStage = () => {
+  stage.innerHTML = '';
+};
 
 // delete contact
 stage.addEventListener('click', (event) => {
@@ -20,7 +26,7 @@ stage.addEventListener('click', (event) => {
 
   if (
     target.nodeName !== 'BUTTON' ||
-    !target.classList.contains('delete-friend')
+    !target.classList.contains('delete-contact-button')
   ) {
     return;
   }
@@ -56,7 +62,7 @@ stage.addEventListener('click', (event) => {
   }
 
   clearMessages();
-  stage.innerHTML = '';
+  clearStage();
   stage.append(renderEditContact(contact));
 });
 
@@ -71,7 +77,7 @@ stage.addEventListener('click', (event) => {
     return;
   }
 
-  stage.innerHTML = '';
+  clearStage();
 });
 
 // add contact button
@@ -99,7 +105,7 @@ stage.addEventListener('submit', (event) => {
   addMessage(
     renderMessage(`Contact ${name.value} ${surname.value} created.`, 'success'),
   );
-  stage.innerHTML = '';
+  clearStage();
 });
 
 // save edit contact
@@ -143,7 +149,7 @@ stage.addEventListener('click', (event) => {
   const contactId = contactContainer.dataset.contactId;
 
   clearMessages();
-  stage.innerHTML = '';
+  clearStage();
 
   stage.append(renderAddPet(contactId));
 });
@@ -172,7 +178,7 @@ stage.addEventListener('submit', (event) => {
 
   addPet(contactId.value, pet);
 
-  stage.innerHTML = '';
+  clearStage();
   addMessage(
     renderMessage(
       `Pet ${name.value} added to contact ${contactName} ${contactSurname}.`,
@@ -201,6 +207,25 @@ stage.addEventListener('click', (event) => {
   deletePet(contactId, petId);
 
   container.remove();
+});
+
+stage.addEventListener('click', (event) => {
+  const { target } = event;
+
+  if (
+    target.nodeName !== 'BUTTON' ||
+    !target.classList.contains('edit-pet-button')
+  ) {
+    return;
+  }
+
+  const button = target;
+  const container = button.closest('.pet');
+  const petId = Number(container.dataset.petId);
+  const contactContainer = button.closest('.contact');
+  const contactId = contactContainer.dataset.contactId;
+
+  stage.append(render);
 });
 
 export default stage;
